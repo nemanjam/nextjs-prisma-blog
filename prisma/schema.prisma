@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  bio        String?
-  email      String    @unique
   id         Int       @default(autoincrement()) @id
-  image      String?
-  password   String?
-  username   String?   @unique
+  email      String    @unique
+  username   String    @unique
+  password   String
   role       String    @default("USER")
+  bio        String?
+  image      String?
   articles   Article[] @relation("UserArticles")
   favorites  Article[] @relation("UserFavorites", references: [id])
   followedBy User[]    @relation("UserFollows", references: [id])
