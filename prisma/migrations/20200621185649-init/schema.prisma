@@ -14,11 +14,12 @@ model User {
   image      String?
   password   String?
   username   String?   @unique
+  role       String    @default("USER")
   articles   Article[] @relation("UserArticles")
   favorites  Article[] @relation("UserFavorites", references: [id])
   followedBy User[]    @relation("UserFollows", references: [id])
   following  User[]    @relation("UserFollows", references: [id])
-  Comment    Comment[]
+  comments   Comment[]
 }
 
 model Article {

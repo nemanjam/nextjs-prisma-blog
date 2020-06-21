@@ -130,6 +130,38 @@
     {
       "tag": "CreateField",
       "model": "User",
+      "field": "role",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "role"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "role"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "\"USER\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
       "field": "articles",
       "type": "Article",
       "arity": "List"
@@ -300,7 +332,7 @@
     {
       "tag": "CreateField",
       "model": "User",
-      "field": "Comment",
+      "field": "comments",
       "type": "Comment",
       "arity": "List"
     },
