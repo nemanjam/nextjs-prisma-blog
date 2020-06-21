@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import * as bodyParser from 'body-parser';
 
+import './seeds/seed';
+
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
