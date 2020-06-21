@@ -10,7 +10,7 @@ const main = async () => {
       email: faker.internet.email(),
       image: faker.image.avatar(),
       password: 'password',
-      username: faker.internet.userName,
+      username: faker.internet.userName(),
       role: 'ADMIN',
       //   favorites: [],
       //   followedBy: [],
