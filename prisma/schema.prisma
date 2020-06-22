@@ -15,8 +15,8 @@ model User {
   role       String    @default("USER")
   bio        String?
   image      String?
-  articles   Article[] @relation("UserArticles")
-  favorites  Article[] @relation("UserFavorites", references: [id])
+  articles   Article[] @relation("UserArticles") // named relation, must, user and article have 2 relations
+  favorites  Article[] @relation("UserFavorites", references: [id]) // m:n
   followedBy User[]    @relation("UserFollows", references: [id])
   following  User[]    @relation("UserFollows", references: [id])
   comments   Comment[]
