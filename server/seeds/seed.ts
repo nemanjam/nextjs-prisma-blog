@@ -3,15 +3,15 @@ import * as faker from 'faker';
 
 const prisma = new PrismaClient();
 
-const main = async () => {
-  //
-
+const resetDatabase = async () => {
   for (const tableName of ['Article', 'User', 'Comment', 'Category']) {
     await prisma.executeRaw(
       `TRUNCATE TABLE "${tableName}" RESTART IDENTITY CASCADE;`
     );
   }
+};
 
+const createUsers = async () => {
   // create 3 users
   const userPromises = [...Array.from(Array(3).keys())].map((index) => {
     let role = 'USER';
@@ -31,15 +31,67 @@ const main = async () => {
         //   favorites: [],
         //   followedBy: [],
         //   following: [],
-        //   comments: [],
-        //   articles: [],
+        //   // comments: [],
+        //   // articles: [],
       },
     });
     return user;
   });
 
-  await Promise.all([...userPromises]);
+  await Promise.all(userPromises);
+};
 
+const favoriteArticles = async () => {
+  const articles = await prisma.article.findMany();
+
+  // admin favorites all articles
+  await prisma.user.update({
+    where: { id: 1 },
+    data: {
+      favorites: {
+        connect: [
+          ...articles.map((a) => ({
+            id: a.id,
+          })),
+        ],
+      },
+    },
+  });
+};
+
+const followUsers = async () => {
+  const users = await prisma.user.findMany();
+
+  // admin follows first user
+  await prisma.user.update({
+    where: { id: 1 },
+    data: {
+      following: {
+        connect: {
+          id: users[2].id,
+        },
+      },
+    },
+  });
+
+  // all follow admin
+  users.map(async (user, index) => {
+    if (index === 0) return;
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        following: {
+          connect: {
+            id: users[0].id,
+          },
+        },
+      },
+    });
+  });
+};
+
+const createArticles = async () => {
   // create 9 articles
   const users = await prisma.user.findMany();
   const articlePromises = [...Array.from(Array(9).keys())].map((index) => {
@@ -57,15 +109,34 @@ const main = async () => {
           connect: { email: user.email },
         },
         // favoritedBy []
-        // comments    []
+        // //comments    []
         // categories
       },
     });
     return article;
   });
 
-  await Promise.all([...articlePromises]);
+  await Promise.all(articlePromises);
+};
 
+const addArticleToCategory = async () => {
+  const categories = await prisma.category.findMany();
+
+  // add one article per category, 1 in 1, 2 in 2...
+  const articlePromises = categories.map((c) => {
+    return prisma.article.update({
+      where: { id: c.id },
+      data: {
+        categories: {
+          connect: { id: c.id },
+        },
+      },
+    });
+  });
+  await Promise.all(articlePromises); // required!!!
+};
+
+const createComments = async () => {
   // create 27 comments
   const articles = await prisma.article.findMany();
   const commentPromises = [...Array.from(Array(27).keys())].map((index) => {
@@ -85,7 +156,45 @@ const main = async () => {
     return comment;
   });
 
-  await Promise.all([...commentPromises]);
+  await Promise.all(commentPromises);
+};
+
+const createCategories = async () => {
+  // create 3 categories
+  const categoryPromises = [...Array.from(Array(3).keys())].map((index) => {
+    //
+    const category = prisma.category.create({
+      data: {
+        name: `category${index}`,
+      },
+    });
+    return category;
+  });
+
+  await Promise.all(categoryPromises);
+};
+
+const main = async () => {
+  // create models
+  await resetDatabase();
+  await createUsers();
+  await createArticles();
+  await createComments();
+  await createCategories();
+
+  // relations
+  await followUsers();
+  await favoriteArticles();
+  await addArticleToCategory();
+
+  // const x = await prisma.article
+  //   .findOne({
+  //     where: {
+  //       id: 1,
+  //     },
+  //   })
+  //   .categories();
+  // console.log(x);
 };
 
 main()

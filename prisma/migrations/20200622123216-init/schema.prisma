@@ -49,7 +49,7 @@ model Comment {
 }
 
 model Category {
-  id    Int       @default(autoincrement()) @id
-  name  String    @unique
-  posts Article[] @relation("ArticlesCategories", references: [id])
+  id       Int       @default(autoincrement()) @id
+  name     String    @unique
+  articles Article[] @relation("ArticlesCategories", references: [id])
 }

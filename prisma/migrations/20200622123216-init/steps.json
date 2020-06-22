@@ -944,7 +944,7 @@
     {
       "tag": "CreateField",
       "model": "Category",
-      "field": "posts",
+      "field": "articles",
       "type": "Article",
       "arity": "List"
     },
@@ -954,7 +954,7 @@
         "path": {
           "tag": "Field",
           "model": "Category",
-          "field": "posts"
+          "field": "articles"
         },
         "directive": "relation"
       }
@@ -966,7 +966,7 @@
         "path": {
           "tag": "Field",
           "model": "Category",
-          "field": "posts"
+          "field": "articles"
         },
         "directive": "relation"
       },
@@ -980,7 +980,7 @@
         "path": {
           "tag": "Field",
           "model": "Category",
-          "field": "posts"
+          "field": "articles"
         },
         "directive": "relation"
       },
