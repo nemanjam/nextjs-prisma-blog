@@ -3,54 +3,29 @@
   "steps": [
     {
       "tag": "CreateSource",
-      "source": "db"
+      "source": "postgresql"
     },
     {
       "tag": "CreateArgument",
       "location": {
         "tag": "Source",
-        "source": "db"
+        "source": "postgresql"
       },
       "argument": "provider",
-      "value": "\"sqlite\""
+      "value": "\"postgresql\""
     },
     {
       "tag": "CreateArgument",
       "location": {
         "tag": "Source",
-        "source": "db"
+        "source": "postgresql"
       },
       "argument": "url",
-      "value": "\"file:./dev.db\""
+      "value": "env(\"DATABASE_URL\")"
     },
     {
       "tag": "CreateModel",
       "model": "User"
-    },
-    {
-      "tag": "CreateField",
-      "model": "User",
-      "field": "bio",
-      "type": "String",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateField",
-      "model": "User",
-      "field": "email",
-      "type": "String",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "User",
-          "field": "email"
-        },
-        "directive": "unique"
-      }
     },
     {
       "tag": "CreateField",
@@ -98,23 +73,27 @@
     {
       "tag": "CreateField",
       "model": "User",
-      "field": "image",
+      "field": "email",
       "type": "String",
-      "arity": "Optional"
+      "arity": "Required"
     },
     {
-      "tag": "CreateField",
-      "model": "User",
-      "field": "password",
-      "type": "String",
-      "arity": "Optional"
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "User",
+          "field": "email"
+        },
+        "directive": "unique"
+      }
     },
     {
       "tag": "CreateField",
       "model": "User",
       "field": "username",
       "type": "String",
-      "arity": "Optional"
+      "arity": "Required"
     },
     {
       "tag": "CreateDirective",
@@ -126,6 +105,13 @@
         },
         "directive": "unique"
       }
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "password",
+      "type": "String",
+      "arity": "Required"
     },
     {
       "tag": "CreateField",
@@ -158,6 +144,20 @@
       },
       "argument": "",
       "value": "\"USER\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "bio",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "image",
+      "type": "String",
+      "arity": "Optional"
     },
     {
       "tag": "CreateField",

@@ -6,19 +6,21 @@ const prisma = new PrismaClient();
 const main = async () => {
   //
 
-  for (const tableName of ['User', 'Article', 'Comment', 'Category']) {
-    await prisma.executeRaw(`DELETE FROM "${tableName}";`);
+  for (const tableName of ['Article', 'User', 'Comment', 'Category']) {
+    await prisma.executeRaw(
+      `TRUNCATE TABLE "${tableName}" RESTART IDENTITY CASCADE;`
+    );
   }
 
   // create 3 users
-  [...Array.from(Array(3).keys())].map(async (index) => {
+  const userPromises = [...Array.from(Array(3).keys())].map((index) => {
     let role = 'USER';
 
     if (index === 0) {
       role = 'ADMIN';
     }
 
-    const user = await prisma.user.create({
+    const user = prisma.user.create({
       data: {
         bio: faker.lorem.sentences(2),
         image: faker.image.avatar(),
@@ -33,17 +35,19 @@ const main = async () => {
         //   articles: [],
       },
     });
+    return user;
   });
+
+  await Promise.all([...userPromises]);
 
   // create 9 articles
   const users = await prisma.user.findMany();
-
-  [...Array.from(Array(9).keys())].map(async (index) => {
+  const articlePromises = [...Array.from(Array(9).keys())].map((index) => {
     //
     const j = Math.floor(index / 3);
     const user = users[j];
 
-    const article = await prisma.article.create({
+    const article = prisma.article.create({
       data: {
         slug: faker.lorem.slug(),
         title: faker.lorem.sentence(),
@@ -57,7 +61,31 @@ const main = async () => {
         // categories
       },
     });
+    return article;
   });
+
+  await Promise.all([...articlePromises]);
+
+  // create 27 comments
+  const articles = await prisma.article.findMany();
+  const commentPromises = [...Array.from(Array(27).keys())].map((index) => {
+    //
+    const j = Math.floor(index / 3);
+    const article = articles[j];
+
+    const comment = prisma.comment.create({
+      data: {
+        body: faker.lorem.sentences(2),
+        article: { connect: { id: article.id } },
+        author: {
+          connect: { id: article.authorId },
+        },
+      },
+    });
+    return comment;
+  });
+
+  await Promise.all([...commentPromises]);
 };
 
 main()
