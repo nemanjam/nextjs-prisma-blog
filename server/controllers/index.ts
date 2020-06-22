@@ -1,1 +1,3 @@
-export const x = 3;
+import articles from './articlesController';
+
+export { articles };

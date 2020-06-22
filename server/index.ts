@@ -2,8 +2,9 @@ import next from 'next';
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import * as bodyParser from 'body-parser';
+import apiRoutes from './routes';
 
-import './seeds/seed';
+// import './seeds/seed';
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -15,9 +16,9 @@ const port = process.env.PORT || 3000;
     await app.prepare();
     const prisma = new PrismaClient();
     const server = express();
-    const router = express.Router();
     server.use(bodyParser.json());
-    const apiRoutes = setRoutes(router, prisma);
+    const router = express.Router();
+    const apiRoutes111 = setRoutes(router, prisma); // eslint-disable-line
     server.use('/api', apiRoutes); //
 
     server.all('*', (req: Request, res: Response) => {
