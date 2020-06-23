@@ -174,7 +174,9 @@ const createCategories = async () => {
   await Promise.all(categoryPromises);
 };
 
-const main = async () => {
+const seed = async (shouldRun: boolean) => {
+  if (!shouldRun) return;
+
   // create models
   await resetDatabase();
   await createUsers();
@@ -187,6 +189,7 @@ const main = async () => {
   await favoriteArticles();
   await addArticleToCategory();
 
+  console.log('Database sedded...');
   // const x = await prisma.article
   //   .findOne({
   //     where: {
@@ -197,8 +200,4 @@ const main = async () => {
   // console.log(x);
 };
 
-main()
-  .catch((e) => console.error(e))
-  .finally(async () => {
-    await prisma.disconnect();
-  });
+export default seed;
