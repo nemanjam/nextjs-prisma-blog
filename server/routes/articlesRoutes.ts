@@ -3,8 +3,14 @@ import { articles } from '../controllers';
 
 const router: Router = Router();
 
-router.param('slug', articles.bySlug); // params
 router.get('/articles', articles.findAll);
+router.get('/articles/feed', articles.findFeed);
+router.get('/articles/:slug', articles.findOne);
+router.post('/articles', articles.create);
+router.put('/articles/:slug', articles.update);
+router.delete('/articles/:slug', articles.deleteArticle);
+router.post('/articles/:slug/favorite', articles.favorite);
+router.delete('/articles/:slug/favorite', articles.unFavorite);
 
 /*
 router.param('slug', articles.bySlug);
