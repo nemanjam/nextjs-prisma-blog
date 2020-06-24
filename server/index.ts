@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 
 import apiRoutes from './routes';
 import seed from './seeds/seed';
+import listEndpoints from 'express-list-endpoints';
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
@@ -24,6 +25,7 @@ const prisma = new PrismaClient();
     app.all('*', (req: Request, res: Response) => {
       return handle(req, res);
     });
+
     app.listen(port, (err?: any) => {
       if (err) throw err;
       console.log(

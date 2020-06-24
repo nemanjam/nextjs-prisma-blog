@@ -3,7 +3,8 @@ import { articles } from '../controllers';
 
 const router: Router = Router();
 
-router.get('/articles', articles.get);
+router.param('slug', articles.bySlug); // params
+router.get('/articles', articles.findAll);
 
 /*
 router.param('slug', articles.bySlug);
