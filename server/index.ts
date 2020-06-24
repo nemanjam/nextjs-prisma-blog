@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 
 import apiRoutes from './routes';
 import seed from './seeds/seed';
-import listEndpoints from 'express-list-endpoints';
+// import listEndpoints from 'express-list-endpoints';
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });

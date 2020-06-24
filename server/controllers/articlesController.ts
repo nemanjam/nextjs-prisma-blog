@@ -245,6 +245,48 @@ const unFavorite = async (req, res) => {
   res.json({ article });
 };
 
+/**
+ * GET /api/articles/:slug/comments
+ */
+const findComments = async (req, res) => {
+  const comments = await prisma.comment.findMany({
+    where: { article: { slug: req.params.slug } },
+    orderBy: { createdAt: 'desc' },
+    select: commentSelect,
+  });
+  res.json({ comments });
+};
+
+/**
+ * POST /api/articles/:slug/comments
+ */
+const addComment = async (req, res) => {
+  const comment = await prisma.comment.create({
+    data: {
+      body: req.body.body,
+      article: {
+        connect: { slug: req.params.slug },
+      },
+      author: {
+        connect: { id: userId },
+      },
+    },
+    select: commentSelect,
+  });
+  res.json({ comment });
+};
+
+/**
+ * DELETE /api/articles/:slug/comments/:id
+ */
+const deleteComment = async (req, res) => {
+  const comment = await prisma.comment.delete({
+    where: { id: +req.params.id },
+    select: commentSelect,
+  });
+  res.json({ comment });
+};
+
 export default {
   findOne,
   findAll,
@@ -254,4 +296,7 @@ export default {
   deleteArticle,
   favorite,
   unFavorite,
+  findComments,
+  addComment,
+  deleteComment,
 };
